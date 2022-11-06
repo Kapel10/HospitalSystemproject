@@ -11,8 +11,7 @@
     <div>
         {% for doctor in Doctors %}
             <div>
-
-                <h5><a href="{% url 'doctor' doctor.id %}">{{ doctor.name }}</a></h5>
+                <h5>{{ doctor.first_name }}</h5>
                 <a href="{% url 'update-doctor' doctor.id %}">Edit</a>
                 <a href="{% url 'delete-doctor' doctor.id %}">Delete</a>
 
@@ -33,7 +32,7 @@
         {% for patient in Patients %}
             <div>
 
-                <h5><a href="{% url 'patient' patient.id %}">{{ patient.name }}</a></h5>
+                <h5>{{ patient.first_name }}</h5>
                 <a href="{% url 'update-patient' patient.id %}">Edit</a>
                 <a href="{% url 'delete-patient' patient.id %}">Delete</a>
 

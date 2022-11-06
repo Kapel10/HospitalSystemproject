@@ -1,3 +1,4 @@
+
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -5,17 +6,42 @@
     {% endfor %}
 </ul>
 {% endif %}
-<div>
-    <form method="POST" action="">
-        {% csrf_token %}
-        <label>Username:</label>
-        <input type="text" name="username" placeholder="Enter Username" />
 
-        <label>Password:</label>
-        <input type="password" name="password" placeholder="Enter Password" />
+{% load static %}
+<link href="{% static 'css/styles.css' %}" rel="stylesheet">
 
-        <input type="submit" value="Login" />
+<div class="nav">
+      <a href=""> DenSys.me</a>
+    </div>
+    <div class="con">
+      <div class="section">
+        <h2 class="text-center">Sign in to Account</h2>
+        <form method="POST" action="">
+            {% csrf_token %}
+          <div class="form-group">
+            <label class="form-label">Username</label>
+            <input class="form-control" type="text" name="username" required />
+          </div>
+          <div class="form-group d">
+            <label class="form-label">Password</label>
+            <input
+              class="form-control"
+              type="password"
+              name="password"
+              required
+            />
+          </div>
+          <input class="btn btn-light w-10" type="submit" value="LOGIN" />
+        </form>
+      </div>
+      <div class="picture">
+        <img
+          class="doctor"
+          src="{% static 'img/Doctor_Isometric 1.svg' %} "
+          alt="doctor-svg"
+        />
+      </div>
+    </div>
 
-    </form>
-</div>
+
 

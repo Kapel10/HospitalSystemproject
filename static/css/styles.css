@@ -1,0 +1,68 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  background: linear-gradient(180deg, #f5f5f5 0%, #ece9e6 100%);
+  font-family: "Nunito Sans", sans-serif;
+}
+
+.nav {
+  margin-left: 20vh;
+  margin-top: 10vh;
+  cursor: pointer;
+}
+.nav svg {
+  width: 0;
+  height: 0;
+  margin-bottom: -0.5vh;
+  margin-left: 0.5vh;
+}
+.nav a {
+  width: 0;
+  margin-right: 1vh;
+  text-decoration: none;
+  color: black;
+  font-weight: 600;
+}
+
+.con {
+  display: flex;
+}
+.con .doctor {
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  width: 80vh;
+  height: 80vh;
+}
+.con .section {
+  position: absolute;
+  top: 26%;
+  left: 10%;
+  width: 360px;
+  height: -webkit-min-content;
+  height: -moz-min-content;
+  height: min-content;
+  padding: 20px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #b6fbff 0%, #83a4d4 100%);
+}
+.con .section h2 {
+  font-size: 30px;
+  margin-bottom: 25px;
+}
+.con .section form {
+  font-size: 18px;
+}
+.con .section form .form-group {
+  margin-bottom: 12px;
+}
+.con .section form input[type=submit] {
+  font-size: 20px;
+  margin-top: 15px;
+}/*# sourceMappingURL=styles.css.map */

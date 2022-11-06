@@ -1,40 +1,117 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django import forms
+from django.forms import widgets
 
 # Create your models here.
 
+from django.core.validators import MaxValueValidator, MinValueValidator
+
+
+class User(AbstractUser):
+    first_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+
+    birth_date = models.DateTimeField(auto_now=False, null=True)
+
+    IIN_number = models.PositiveIntegerField(default='0000000000')
+    ID_number = models.PositiveIntegerField(null=True)
+
+    contact_number = models.CharField(max_length=12,default='00000000')
+
+    address = models.CharField(max_length=100,null=True)
+
+
+
+    #id_number
+    #contact_number
+    #address
+    is_patient = models.BooleanField('patient status', default=False)
+    is_doctor = models.BooleanField('doctor status', default=False)
+
+
 class Doctor(models.Model):
-    #  user = models.OneToOneField(User,primary_key=True,on_delete=models.CASCADE)
-    IIN_number = models.PositiveIntegerField()
-    name = models.CharField(max_length=30)
-    contact_number = models.CharField(max_length=12)
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+
+    department_id = models.PositiveIntegerField(null=True)
+    specialization_id = models.PositiveIntegerField(null=True)
+    experience = models.PositiveIntegerField(null=True)
+
+    price = models.PositiveIntegerField(null=True)
+
+    category = [
+
+        ('highest', 'highest'),
+        ('first', 'first'),
+        ('second', 'second'),
+        ('middle', 'middle'),
+
+    ]
+
+    category = models.CharField(max_length=100, choices=category, default='second')
+
+    ratings = models.PositiveIntegerField(null=True,validators=[
+            MaxValueValidator(10),
+            MinValueValidator(1)
+        ])
+
+    schedule_details = models.CharField(max_length=100,null=True)
+
+    degree = [
+
+        ('MD', 'MD'),
+        ('PhD', 'PhD'),
+        ('Bachelor', 'Bachelor'),
+        ('Doctoral', 'Doctoral'),
+
+    ]
+
+    degree = models.CharField(max_length=100, choices=degree, default='Bachelor')
+
+
+
+
+
+
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
 
     def __str__(self):
-        return self.name
+        return self.user.first_name
 
 class Patient(models.Model):
-    #date_of_birth = models.DateTimeField()
-    # user = models.OneToOneField(User,primary_key=True,on_delete=models.CASCADE)
-    IIN_number = models.PositiveIntegerField()
-    #ID_numbeer = models.PositiveIntegerField()
-    name = models.CharField(max_length=30)
-    #blood_group = (
-    #   ('type', 'AB+'),
-    #   ('type', 'AB-'),
-    #   ('type', 'A+'),
-    #   ('type', 'A-'),
-    #   ('type', 'B+'),
-    #    ('type', 'B-'),
-    #   ('type', 'O+'),
-    #    ('type', 'O-'),
-    #    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    emergency_contact_number = models.CharField(max_length=12,null=True)
 
-    #    contact_number = models.CharField(max_length=12)
-    #   emergency_contact_number = models.CharField(max_length=12)
-    #   address = models.CharField(max_length=30)
+    blood_group = [
+        ('AB+', 'AB+'),
+        ('AB-', 'AB-'),
+        ('A+', 'A+'),
+        ('A-', 'A-'),
+        ('B+', 'B+'),
+        ('B-', 'B-'),
+        ('O+', 'O+'),
+        ('O-', 'O-'),
+    ]
+
+    blood_group = models.CharField(max_length=10, choices=blood_group, default='A+')
+
+
+    marital_status = [
+
+        ('married', 'married'),
+        ('divorced', 'divorced'),
+        ('never_married', 'never_married'),
+
+    ]
+
+    marital_status = models.CharField(max_length=100, choices=marital_status,default='never_married')
+
+
 
 
 
@@ -47,5 +124,5 @@ class Patient(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return self.user.first_name
 
