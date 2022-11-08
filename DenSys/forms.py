@@ -170,16 +170,16 @@ class DoctorForm(UserCreationForm):
 
         doctor = Doctor.objects.create(user=user)
 
-        doctor.marital_status = self.cleaned_data.get('department_id')
-        doctor.marital_status = self.cleaned_data.get('specialization_id')
-        doctor.marital_status = self.cleaned_data.get('experience')
-        doctor.marital_status = self.cleaned_data.get('price')
+        doctor.department_id = self.cleaned_data.get('department_id')
+        doctor.specialization_id = self.cleaned_data.get('specialization_id')
+        doctor.experience = self.cleaned_data.get('experience')
+        doctor.price = self.cleaned_data.get('price')
 
-        doctor.marital_status = self.cleaned_data.get('category')
-        doctor.marital_status = self.cleaned_data.get('degree')
+        doctor.category = self.cleaned_data.get('category')
+        doctor.degree = self.cleaned_data.get('degree')
 
-        doctor.marital_status = self.cleaned_data.get('ratings')
-        doctor.marital_status = self.cleaned_data.get('schedule_details')
+        doctor.ratings = self.cleaned_data.get('ratings')
+        doctor.schedule_details = self.cleaned_data.get('schedule_details')
 
 
         doctor.save()
