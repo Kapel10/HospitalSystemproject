@@ -8,22 +8,34 @@
 {% endif %}
 
 {% load static %}
-<link href="{% static 'css/styles.css' %}" rel="stylesheet">
+<link href="{% static 'css/styles1.css' %}" rel="stylesheet">
 
-<div class="nav">
-      <a href=""> DenSys.me</a>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+<body>
+    <div class="container">
+      <div class="text">
+        <h1>Hi, this is <span>DenSys.me</span></h1>
+        <p>We treat people all over the world!</p>
+      </div>
     </div>
-    <div class="con">
-      <div class="section">
-        <h2 class="text-center">Sign in to Account</h2>
-        <form method="POST" action="">
+
+    <div class="login-section">
+      <div class="form">
+            <form method="POST" action="">
+                <h1>Log In</h1>
             {% csrf_token %}
           <div class="form-group">
-            <label class="form-label">Username</label>
+            <label class="">Username</label>
             <input class="form-control" type="text" name="username" required />
           </div>
           <div class="form-group d">
-            <label class="form-label">Password</label>
+            <label class="">Password</label>
             <input
               class="form-control"
               type="password"
@@ -31,17 +43,11 @@
               required
             />
           </div>
-          <input class="btn btn-light w-10" type="submit" value="LOGIN" />
+          <input class="btn" type="submit" value="Confirm" />
         </form>
       </div>
-      <div class="picture">
-        <img
-          class="doctor"
-          src="{% static 'img/Doctor_Isometric 1.svg' %} "
-          alt="doctor-svg"
-        />
-      </div>
     </div>
+  </body>
 
 
 

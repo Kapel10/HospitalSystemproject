@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Doctor,Patient, User
+from .models import Doctor,Patient, User, Schedule
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 from django import forms
@@ -14,7 +14,7 @@ class PatientForm(UserCreationForm):
     IIN_number = forms.IntegerField(required=True)
     ID_number = forms.IntegerField(required=True)
 
-    birth_date = forms.DateTimeField(required=True)
+
 
     contact_number = forms.CharField(required=True)
     emergency_contact_number = forms.CharField(required=True)
@@ -68,7 +68,7 @@ class PatientForm(UserCreationForm):
         user.IIN_number = self.cleaned_data.get('IIN_number')
         user.ID_number = self.cleaned_data.get('ID_number')
 
-        user.birth_date = self.cleaned_data.get('birth_date')
+
 
         user.contact_number = self.cleaned_data.get('contact_number')
 
@@ -101,14 +101,31 @@ class DoctorForm(UserCreationForm):
     IIN_number = forms.IntegerField(required=True)
     ID_number = forms.IntegerField(required=True)
 
-    birth_date = forms.DateTimeField(required=True)
+
 
     contact_number = forms.CharField(required=True)
 
     address = forms.CharField(required=True)
+    department_id = [
 
-    department_id = forms.IntegerField(required=True)
-    specialization_id = forms.IntegerField(required=True)
+        ('medicine', 'medicine'),
+        ('surgery', 'surgery'),
+        ('gynecology', 'gynecology'),
+        ('obstetrics', 'obstetrics'),
+        ('pediatrics', 'pediatrics'),
+        ('radiology', 'radiology'),
+        ('eye', 'eye'),
+        ('ENT', 'ENT'),
+        ('dental', 'dental'),
+        ('orthopedics', 'orthopedics'),
+        ('neurology', 'neurology'),
+        ('cardiology', 'cardiology'),
+        ('psychiatry', 'psychiatry'),
+        ('skin', 'skin'),
+
+    ]
+    department_id = forms.ChoiceField(choices=department_id)
+    specialization_id = forms.CharField(required=True)
     experience = forms.IntegerField(required=True)
     price = forms.IntegerField(required=True)
 
@@ -158,7 +175,7 @@ class DoctorForm(UserCreationForm):
         user.IIN_number = self.cleaned_data.get('IIN_number')
         user.ID_number = self.cleaned_data.get('ID_number')
 
-        user.birth_date = self.cleaned_data.get('birth_date')
+
 
         user.contact_number = self.cleaned_data.get('contact_number')
 
@@ -192,7 +209,7 @@ class UpdateUserForm(forms.ModelForm):
     email = forms.EmailField(required=False,
                              widget=forms.TextInput(attrs={'class': 'form-control'}))
 
-    birth_date = forms.DateTimeField(required=True)
+
 
     IIN_number = forms.IntegerField(required=True)
     ID_number = forms.IntegerField(required=True)
@@ -206,16 +223,76 @@ class UpdateUserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("username", "email", "first_name", "last_name", "middle_name", "birth_date", "IIN_number", "ID_number", "contact_number","address")
+        fields = ("username", "email", "first_name", "last_name", "middle_name",  "IIN_number", "ID_number", "contact_number","address")
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            'email': forms.EmailInput(attrs={'class': 'input', 'required': True}),
+            'first_name': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            'last_name': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            'middle_name': forms.TextInput(attrs={'class': 'input', 'required': True}),
+
+
+            'IIN_number': forms.NumberInput(attrs={'class': 'input', 'required': True}),
+            'ID_number': forms.NumberInput(attrs={'class': 'input', 'required': True}),
+            'contact_number': forms.NumberInput(attrs={'class': 'input', 'required': True}),
+            'address': forms.TextInput(attrs={'class': 'input', 'required': True}),
+        }
 
 
 class DoctorUpdateForm(ModelForm):
     class Meta:
         model = Doctor
         fields = ("department_id", "specialization_id", "experience", "price", "category", "degree", "ratings", "schedule_details" )
-
+        widgets = {
+            'department_id': forms.Select(attrs={'class': 'form-control', 'autofocus': True}),
+            'specialization_id': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            'experience': forms.NumberInput(attrs={'class': 'form-control', 'autofocus': True}),
+            'price': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            'category': forms.Select(attrs={'class': 'form-control', 'autofocus': True}),
+            'degree': forms.Select(attrs={'class': 'input', 'required': True}),
+            'ratings': forms.NumberInput(attrs={'class': 'form-control', 'autofocus': True}),
+            'schedule_details': forms.TextInput(attrs={'class': 'input', 'required': True}),
+        }
 
 class PatientUpdateForm(ModelForm):
     class Meta:
         model = Patient
         fields = ("emergency_contact_number", "blood_group", "marital_status")
+        widgets = {
+            'emergency_contact_number': forms.NumberInput(attrs={'class': 'form-control', 'autofocus': True}),
+            'blood_group': forms.Select(attrs={'class': 'input', 'required': True}),
+            'marital_status': forms.Select(attrs={'class': 'form-control', 'autofocus': True}),
+
+        }
+
+
+
+class ScheduleForm(ModelForm):
+
+    class Meta:
+        model = Schedule
+        fields = ("patient_schedule","doctor_schedule","status")
+        status = [
+
+            ('denied', 'denied'),
+            ('approved', 'divorced'),
+
+        ]
+        widgets = {
+            'patient_schedule': forms.Select(attrs={'class': 'input', 'autofocus': True}),
+            'doctor_schedule': forms.Select(attrs={'class': 'input', 'required': True}),
+
+            'status': forms.Select(attrs={'class': 'input', 'required': False}),
+        }
+
+class ScheduleuserForm(ModelForm):
+
+    class Meta:
+        model = Schedule
+        fields = ("patient_schedule","doctor_schedule")
+
+        widgets = {
+            'patient_schedule': forms.Select(attrs={'class': 'input', 'autofocus': True}),
+            'doctor_schedule': forms.Select(attrs={'class': 'input', 'required': True}),
+
+        }

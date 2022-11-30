@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
-from .forms import DoctorForm,PatientForm,DoctorUpdateForm,UpdateUserForm,PatientUpdateForm
-from .models import Doctor,Patient
+from .forms import DoctorForm,PatientForm,DoctorUpdateForm,UpdateUserForm,PatientUpdateForm,ScheduleForm,ScheduleuserForm
+from .models import Doctor,Patient,Schedule
 
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
@@ -29,7 +29,13 @@ def loginPage(request):
         user = authenticate(request,username=username,password=password)
         if user is not None:
             login(request,user)
-            return redirect('main')
+            if user.is_patient:
+                return redirect('userpage')
+            elif user.is_doctor:
+                return redirect('doctorpage')
+            else:
+                return redirect('main')
+
         else:
             messages.error(request, 'User name or password does not exist')
     context = {}
@@ -43,10 +49,31 @@ def logoutUser(request):
 def main_page(request):
     Doctors = User.objects.filter(Q(is_doctor=True))
     Patients = User.objects.filter(Q(is_patient=True))
+    schedule = Schedule.objects.all()
 
-    context = {'Doctors': Doctors,'Patients': Patients}
+    context = {'Doctors': Doctors,'Patients': Patients, 'schedule':schedule}
 
     return render(request,'DenSys/main.html',context)
+
+
+def userpage(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    #doctor = Doctor.objects.all()
+    schedule = Schedule.objects.all()
+    doctors_names = Doctor.objects.all().filter(Q(specialization_id__icontains=q) |
+                                                Q(user__first_name=q)
+                                                )
+
+    doctors_scecial = Doctor.objects.all()
+
+
+
+    context = {'schedule':schedule,'doctor_names':doctors_names,'doctor_special':doctors_scecial}
+
+    return render(request,'DenSys/user.html',context)
+
+def doctorpage(request):
+    return render(request,'DenSys/doctorpage.html')
 
 
 def doctor_page(request,pk):
@@ -136,3 +163,37 @@ def delete_patient(request,pk):
         patient.delete()
         return redirect('main')
     return render(request,'DenSys/delete.html',{'obj' : patient})
+
+
+####################################################################v##########################################################################################################################################################################
+
+def createschedule(request):
+    form = ScheduleuserForm
+    if request.method == 'POST':
+        form = ScheduleuserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('main')
+    context = {'form': form}
+    return render(request, 'DenSys/schedule_form.html', context)
+
+
+def updateschedule(request,pk):
+    schedule = Schedule.objects.get(id=pk)
+    form = ScheduleForm(instance=schedule)
+    if request.method == 'POST':
+        form = ScheduleForm(request.POST,instance=schedule)
+        if form.is_valid():
+            form.save()
+            return redirect('main')
+    context = {'form' : form}
+    return render(request,'DenSys/schedule_form.html',context)
+
+
+def deleteschedule(request,pk):
+    schedule = Schedule.objects.get(id=pk)
+    if request.method == 'POST':
+        schedule.delete()
+        return redirect('main')
+    context = {'obj': schedule}
+    return render(request,'DenSys/delete.html',context)

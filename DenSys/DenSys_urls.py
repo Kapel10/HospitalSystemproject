@@ -5,6 +5,9 @@ urlpatterns = [
     path('',views.loginPage,name="login"),
     path('logout',views.logoutUser,name="logout"),
     path('main/', views.main_page,name="main"),
+    path('user/', views.userpage,name="userpage"),
+    path('doctor/', views.doctor_page,name="doctorpage"),
+
     path('doctor/<str:pk>/', views.doctor_page,name="doctor"),
     path('create-doctor/',views.create_doctor.as_view(),name="create-doctor"),
     path('update-doctor/<str:pk>/',views.update_doctor,name="update-doctor"),
@@ -14,6 +17,14 @@ urlpatterns = [
     path('create-patient/',views.create_patient.as_view(),name="create-patient"),
     path('update-patient/<str:pk>/',views.update_patient,name="update-patient"),
     path('delete-patient/<str:pk>/',views.delete_patient,name="delete-patient"),
+
+
+
+    path('create-schedule/',views.createschedule,name="create-schedule"),
+    path('update-schedule/<str:pk>/',views.updateschedule,name="update-schedule"),
+    path('delete-schedule/<str:pk>/',views.deleteschedule,name="delete-schedule"),
+
+
 
 
 ]

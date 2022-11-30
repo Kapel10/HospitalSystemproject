@@ -14,7 +14,7 @@ class User(AbstractUser):
     middle_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
 
-    birth_date = models.DateTimeField(auto_now=False, null=True)
+
 
     IIN_number = models.PositiveIntegerField(default='0000000000')
     ID_number = models.PositiveIntegerField(null=True)
@@ -36,8 +36,29 @@ class Doctor(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
-    department_id = models.PositiveIntegerField(null=True)
-    specialization_id = models.PositiveIntegerField(null=True)
+    department_id = [
+
+        ('medicine', 'medicine'),
+        ('surgery', 'surgery'),
+        ('gynecology', 'gynecology'),
+        ('obstetrics', 'obstetrics'),
+        ('pediatrics', 'pediatrics'),
+        ('radiology', 'radiology'),
+        ('eye', 'eye'),
+        ('ENT', 'ENT'),
+        ('dental', 'dental'),
+        ('orthopedics', 'orthopedics'),
+        ('neurology', 'neurology'),
+        ('cardiology', 'cardiology'),
+        ('psychiatry', 'psychiatry'),
+        ('skin', 'skin'),
+
+
+
+    ]
+    department_id = models.CharField(max_length=100, choices=department_id, default='medicine')
+
+    specialization_id = schedule_details = models.CharField(max_length=100,null=True)
     experience = models.PositiveIntegerField(null=True)
 
     price = models.PositiveIntegerField(null=True)
@@ -120,9 +141,27 @@ class Patient(models.Model):
 
 
 
+
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.user.first_name
+
+
+class Schedule(models.Model):
+    patient_schedule = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    doctor_schedule = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+
+    status = [
+
+        ('denied', 'denied'),
+        ('approved', 'approved'),
+
+    ]
+    status = models.CharField(max_length=100, choices=status, default='denied',null=True)
+
+    def __str__(self):
+        return str(self.id)
+
 

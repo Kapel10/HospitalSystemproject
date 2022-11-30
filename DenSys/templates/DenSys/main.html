@@ -4,6 +4,18 @@
     <a href="{% url 'logout' %}">Logout</a>
 {% endif %}
 
+        {% for sch in schedule %}
+            <div>
+                <h5>{{ schedule.id }}</h5>
+                <a>Schedule</a>
+                <a href="{% url 'update-schedule' sch.id %}">Edit</a>
+                <a href="{% url 'delete-schedule' sch.id %}">Delete</a>
+
+            <hr>
+            </div>
+
+        {% endfor %}
+
 <h4>Doctors of our hospital:</h4>
 <div>
     <a href="{% url 'create-doctor' %}">Register a Doctor</a>
