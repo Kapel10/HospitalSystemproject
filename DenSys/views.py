@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
@@ -12,6 +13,7 @@ from django.views.generic import CreateView,UpdateView
 
 from .models import User
 from django.db.models import Q
+from django import forms
 
 
 
@@ -61,10 +63,12 @@ def userpage(request):
     #doctor = Doctor.objects.all()
     schedule = Schedule.objects.all()
     doctors_names = Doctor.objects.all().filter(Q(specialization_id__icontains=q) |
-                                                Q(user__first_name=q)
+                                                Q(user__first_name=q) |
+                                                Q(department_id=q)
                                                 )
 
-    doctors_scecial = Doctor.objects.all()
+    doctors_scecial = Doctor.objects.all().values('department_id','specialization_id').distinct()
+
 
 
 
@@ -100,7 +104,7 @@ def update_doctor(request,pk):
     form = DoctorUpdateForm(instance=doctor)
     user_form = UpdateUserForm(instance=user2)
     if request.method == 'POST':
-        form = DoctorUpdateForm(request.POST, instance=doctor)
+        form = DoctorUpdateForm(request.POST,request.FILES, instance=doctor)
         user_form = UpdateUserForm(request.POST,instance=user2)
         if form.is_valid() and user_form.is_valid():
             user_form.save()
@@ -167,15 +171,17 @@ def delete_patient(request,pk):
 
 ####################################################################v##########################################################################################################################################################################
 
-def createschedule(request):
-    form = ScheduleuserForm
+def createschedule(request,pk):
+    user2 = User.objects.get(id=pk)
+    my_doctor = Doctor.objects.get(user=user2)
+    form = ScheduleuserForm(initial={'patient_schedule' : request.user.first_name,'doctor_schedule' : my_doctor})
     if request.method == 'POST':
         form = ScheduleuserForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('main')
+            return redirect('userpage')
     context = {'form': form}
-    return render(request, 'DenSys/schedule_form.html', context)
+    return render(request, 'DenSys/schedule_user.html', context)
 
 
 def updateschedule(request,pk):
@@ -197,3 +203,6 @@ def deleteschedule(request,pk):
         return redirect('main')
     context = {'obj': schedule}
     return render(request,'DenSys/delete.html',context)
+
+
+

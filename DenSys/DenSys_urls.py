@@ -20,7 +20,7 @@ urlpatterns = [
 
 
 
-    path('create-schedule/',views.createschedule,name="create-schedule"),
+    path('create-schedule/<str:pk>/',views.createschedule,name="create-schedule"),
     path('update-schedule/<str:pk>/',views.updateschedule,name="update-schedule"),
     path('delete-schedule/<str:pk>/',views.deleteschedule,name="delete-schedule"),
 

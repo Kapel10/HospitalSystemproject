@@ -155,6 +155,8 @@ class DoctorForm(UserCreationForm):
 
     schedule_details = forms.CharField(required=True)
 
+    image_doctor = forms.ImageField()
+
 
 
     class Meta(UserCreationForm.Meta):
@@ -197,6 +199,8 @@ class DoctorForm(UserCreationForm):
 
         doctor.ratings = self.cleaned_data.get('ratings')
         doctor.schedule_details = self.cleaned_data.get('schedule_details')
+
+        doctor.image_doctor = self.cleaned_data.get('image_doctor')
 
 
         doctor.save()
@@ -242,7 +246,7 @@ class UpdateUserForm(forms.ModelForm):
 class DoctorUpdateForm(ModelForm):
     class Meta:
         model = Doctor
-        fields = ("department_id", "specialization_id", "experience", "price", "category", "degree", "ratings", "schedule_details" )
+        fields = ("department_id", "specialization_id", "experience", "price", "category", "degree", "ratings", "schedule_details", "image_doctor" )
         widgets = {
             'department_id': forms.Select(attrs={'class': 'form-control', 'autofocus': True}),
             'specialization_id': forms.TextInput(attrs={'class': 'input', 'required': True}),
@@ -252,6 +256,7 @@ class DoctorUpdateForm(ModelForm):
             'degree': forms.Select(attrs={'class': 'input', 'required': True}),
             'ratings': forms.NumberInput(attrs={'class': 'form-control', 'autofocus': True}),
             'schedule_details': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            #'image_doctor': forms.FileInput(attrs={'class': 'input', 'required': True}),
         }
 
 class PatientUpdateForm(ModelForm):
@@ -271,7 +276,7 @@ class ScheduleForm(ModelForm):
 
     class Meta:
         model = Schedule
-        fields = ("patient_schedule","doctor_schedule","status")
+        fields = ("patient_schedule","doctor_schedule","status","name","surname","contact")
         status = [
 
             ('denied', 'denied'),
@@ -279,20 +284,29 @@ class ScheduleForm(ModelForm):
 
         ]
         widgets = {
-            'patient_schedule': forms.Select(attrs={'class': 'input', 'autofocus': True}),
-            'doctor_schedule': forms.Select(attrs={'class': 'input', 'required': True}),
+            'patient_schedule': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            'doctor_schedule': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            'name': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            'surname': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            'contact': forms.TextInput(attrs={'class': 'input', 'required': True}),
 
             'status': forms.Select(attrs={'class': 'input', 'required': False}),
         }
 
 class ScheduleuserForm(ModelForm):
 
+
     class Meta:
         model = Schedule
-        fields = ("patient_schedule","doctor_schedule")
+        fields = ("name","surname","contact","doctor_schedule","patient_schedule")
+
 
         widgets = {
-            'patient_schedule': forms.Select(attrs={'class': 'input', 'autofocus': True}),
-            'doctor_schedule': forms.Select(attrs={'class': 'input', 'required': True}),
+            #'patient_schedule': forms.Select(attrs={'class': 'input', 'autofocus': True}),
+            'doctor_schedule': forms.TextInput(attrs={'class': 'input', 'required': False,'type': 'hidden'}),
+            'patient_schedule': forms.TextInput(attrs={'class': 'input', 'required': False,'type': 'hidden'}),
+            'name': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            'surname': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            'contact': forms.TextInput(attrs={'class': 'input', 'required': True}),
 
         }

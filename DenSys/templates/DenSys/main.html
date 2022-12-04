@@ -6,7 +6,7 @@
 
         {% for sch in schedule %}
             <div>
-                <h5>{{ schedule.id }}</h5>
+                <h5>Schedule by {{ sch.patient_schedule }} to {{ sch.doctor_schedule }}</h5>
                 <a>Schedule</a>
                 <a href="{% url 'update-schedule' sch.id %}">Edit</a>
                 <a href="{% url 'delete-schedule' sch.id %}">Delete</a>
@@ -22,8 +22,15 @@
     <hr>
     <div>
         {% for doctor in Doctors %}
+
             <div>
+
+                
+
                 <h5>{{ doctor.first_name }}</h5>
+
+                 <img src="{{ doctor.doctor.image_doctor.url }}" width="100" height="100">
+
                 <a href="{% url 'update-doctor' doctor.id %}">Edit</a>
                 <a href="{% url 'delete-doctor' doctor.id %}">Delete</a>
 

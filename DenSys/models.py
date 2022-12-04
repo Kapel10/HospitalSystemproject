@@ -92,6 +92,8 @@ class Doctor(models.Model):
 
     degree = models.CharField(max_length=100, choices=degree, default='Bachelor')
 
+    image_doctor = models.ImageField(upload_to='media/static/img',null=True,default="")
+
 
 
 
@@ -150,8 +152,8 @@ class Patient(models.Model):
 
 
 class Schedule(models.Model):
-    patient_schedule = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    doctor_schedule = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    patient_schedule = models.CharField(max_length=100,null=True)
+    doctor_schedule = models.CharField(max_length=100, null=True)
 
     status = [
 
@@ -160,6 +162,10 @@ class Schedule(models.Model):
 
     ]
     status = models.CharField(max_length=100, choices=status, default='denied',null=True)
+
+    name = models.CharField(max_length=100,null=True)
+    surname = models.CharField(max_length=100,null=True)
+    contact = models.CharField(max_length=100,null=True)
 
     def __str__(self):
         return str(self.id)
