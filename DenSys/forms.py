@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Doctor,Patient, User, Schedule
+from .models import Doctor,Patient, User, Schedule,Treatment
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 from django import forms
@@ -115,7 +115,6 @@ class DoctorForm(UserCreationForm):
         ('pediatrics', 'pediatrics'),
         ('radiology', 'radiology'),
         ('eye', 'eye'),
-        ('ENT', 'ENT'),
         ('dental', 'dental'),
         ('orthopedics', 'orthopedics'),
         ('neurology', 'neurology'),
@@ -276,13 +275,20 @@ class ScheduleForm(ModelForm):
 
     class Meta:
         model = Schedule
-        fields = ("patient_schedule","doctor_schedule","status","name","surname","contact")
+        fields = ("patient_schedule","doctor_schedule","status","name","surname","contact","checked","date","time")
         status = [
 
             ('denied', 'denied'),
             ('approved', 'divorced'),
 
         ]
+        checked = [
+
+            ('unseen', 'unseen'),
+            ('seen', 'seen'),
+
+        ]
+        time = forms.TimeField(widget=forms.TimeInput(format='%H:%M'))
         widgets = {
             'patient_schedule': forms.TextInput(attrs={'class': 'input', 'required': True}),
             'doctor_schedule': forms.TextInput(attrs={'class': 'input', 'required': True}),
@@ -290,17 +296,24 @@ class ScheduleForm(ModelForm):
             'surname': forms.TextInput(attrs={'class': 'input', 'required': True}),
             'contact': forms.TextInput(attrs={'class': 'input', 'required': True}),
 
+            'date': forms.DateInput(attrs={'class': 'input', 'required': True}),
+
+
+
+
             'status': forms.Select(attrs={'class': 'input', 'required': False}),
+            'checked': forms.Select(attrs={'class': 'input', 'required': False}),
         }
+
 
 class ScheduleuserForm(ModelForm):
 
 
     class Meta:
         model = Schedule
-        fields = ("name","surname","contact","doctor_schedule","patient_schedule")
+        fields = ("name","surname","contact","doctor_schedule","patient_schedule","date","time")
 
-
+        time = forms.TimeField(widget=forms.TimeInput(format='%H:%M'))
         widgets = {
             #'patient_schedule': forms.Select(attrs={'class': 'input', 'autofocus': True}),
             'doctor_schedule': forms.TextInput(attrs={'class': 'input', 'required': False,'type': 'hidden'}),
@@ -308,5 +321,27 @@ class ScheduleuserForm(ModelForm):
             'name': forms.TextInput(attrs={'class': 'input', 'required': True}),
             'surname': forms.TextInput(attrs={'class': 'input', 'required': True}),
             'contact': forms.TextInput(attrs={'class': 'input', 'required': True}),
+
+            'date': forms.DateInput(attrs={'class': 'input', 'required': True}),
+
+
+
+        }
+
+
+
+class TreatmentForm(ModelForm):
+    class Meta:
+        model = Treatment
+        fields = ("doctor","patient_treatment","topic","description","first_date","end_date")
+        widgets = {
+            'doctor': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            'patient_treatment': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            'topic': forms.TextInput(attrs={'class': 'input', 'required': True}),
+            'description': forms.TextInput(attrs={'class': 'input', 'required': True}),
+
+            'first_date': forms.DateInput(attrs={'class': 'input', 'required': True}),
+            'end_date': forms.DateInput(attrs={'class': 'input', 'required': True}),
+
 
         }

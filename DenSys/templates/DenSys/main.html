@@ -3,18 +3,40 @@
 {% if request.user.is_authenticated %}
     <a href="{% url 'logout' %}">Logout</a>
 {% endif %}
-
-        {% for sch in schedule %}
+        <h4>Schedules that was checked by admin</h4>
+        {% for sch in checked %}
             <div>
                 <h5>Schedule by {{ sch.patient_schedule }} to {{ sch.doctor_schedule }}</h5>
                 <a>Schedule</a>
                 <a href="{% url 'update-schedule' sch.id %}">Edit</a>
                 <a href="{% url 'delete-schedule' sch.id %}">Delete</a>
-
             <hr>
             </div>
 
         {% endfor %}
+
+        <h4>Schedules that was unchecked by admin</h4>
+
+        {% for sch in unchecked %}
+            <div>
+                <h5>Schedule by {{ sch.patient_schedule }} to {{ sch.doctor_schedule }}</h5>
+                <a>Schedule</a>
+                <a href="{% url 'update-schedule' sch.id %}">Edit</a>
+                <a href="{% url 'delete-schedule' sch.id %}">Delete</a>
+            <hr>
+            </div>
+
+        {% endfor %}
+
+
+
+    <h4>Treats</h4>
+        {% for tr in treat %}
+            <a href="{% url 'update-treatment' tr.id %}">{{ tr.topic }}</a>
+            <a href="{% url 'delete-treatment' tr.id %}">Delete {{ tr.topic }}</a>
+        {% endfor %}
+
+
 
 <h4>Doctors of our hospital:</h4>
 <div>

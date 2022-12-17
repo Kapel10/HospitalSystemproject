@@ -45,7 +45,6 @@ class Doctor(models.Model):
         ('pediatrics', 'pediatrics'),
         ('radiology', 'radiology'),
         ('eye', 'eye'),
-        ('ENT', 'ENT'),
         ('dental', 'dental'),
         ('orthopedics', 'orthopedics'),
         ('neurology', 'neurology'),
@@ -152,6 +151,7 @@ class Patient(models.Model):
 
 
 class Schedule(models.Model):
+
     patient_schedule = models.CharField(max_length=100,null=True)
     doctor_schedule = models.CharField(max_length=100, null=True)
 
@@ -163,11 +163,44 @@ class Schedule(models.Model):
     ]
     status = models.CharField(max_length=100, choices=status, default='denied',null=True)
 
+    checked = [
+
+        ('unseen', 'unseen'),
+        ('seen', 'seen'),
+
+    ]
+    checked = models.CharField(max_length=100, choices=checked, default='unseen', null=True)
+
+    date = models.DateField(null=True)
+    time = models.TimeField(null=True)
+
+
+
+
+
+
+
+
+
+
     name = models.CharField(max_length=100,null=True)
     surname = models.CharField(max_length=100,null=True)
     contact = models.CharField(max_length=100,null=True)
 
     def __str__(self):
         return str(self.id)
+
+
+
+class Treatment(models.Model):
+    doctor = models.CharField(max_length=100, null=True)
+    patient_treatment = models.CharField(max_length=100, null=True)
+    topic = models.CharField(max_length=100)
+    description = models.CharField(max_length=200)
+    first_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
+
+    def __str__(self):
+        return str(self.topic)
 
 
